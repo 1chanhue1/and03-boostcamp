@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import com.boostcamp.and03.ui.screen.bookdetail.model.CharacterUiModel
 import com.boostcamp.and03.ui.screen.bookdetail.model.QuoteUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.model.EdgeUiModel
+import androidx.compose.ui.geometry.Offset
 import com.boostcamp.and03.ui.screen.canvasmemo.component.bottombar.MainBottomBarType
 import com.boostcamp.and03.ui.screen.canvasmemo.model.EdgeUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.model.MemoNodeUiModel
@@ -33,6 +34,11 @@ data class CanvasMemoUiState(
     val pageState: TextFieldState = TextFieldState(),
 
     val selectedBottomBarType: MainBottomBarType = MainBottomBarType.NODE, // 하단 메인 바텀바 상태 기본값은 노드로 설정함
+    val pendingNodeOffset: Offset? = null,
+
+    val pendingNodeCharacter: CharacterUiModel? = null,
+
+    val characters: List<CharacterUiModel> = emptyList(),
 
     val characters: ImmutableList<CharacterUiModel> = persistentListOf(),
     val quotes: ImmutableList<QuoteUiModel> = persistentListOf()
