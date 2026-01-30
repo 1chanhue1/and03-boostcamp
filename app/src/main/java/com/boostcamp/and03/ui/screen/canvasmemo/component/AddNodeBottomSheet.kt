@@ -42,7 +42,6 @@ import com.boostcamp.and03.ui.theme.And03Spacing
 import com.boostcamp.and03.ui.theme.And03Theme
 import com.boostcamp.and03.ui.util.drawVerticalScrollbar
 
-
 @Composable
 fun AddNodeBottomSheet(
     characters: List<CharacterUiModel>,
@@ -50,12 +49,14 @@ fun AddNodeBottomSheet(
     infoDescription: String,
     onSearch: (String) -> Unit,
     onNewCharacterClick: () -> Unit,
-    onAddClick: (CharacterUiModel?) -> Unit,
+    onAddClick: (CharacterUiModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val searchState = rememberTextFieldState()
     val listState = rememberLazyListState()
     var selectedCharacterId by remember { mutableStateOf<String?>(null) }
+
+    val selectedCharacter = characters.find { it.id == selectedCharacterId }
 
     Column(
         modifier = modifier
@@ -152,9 +153,9 @@ fun AddNodeBottomSheet(
         And03Button(
             text = stringResource(R.string.add_node_bottom_sheet_add_button),
             onClick = {
-                val selected = characters.find { it.id == selectedCharacterId }
-                onAddClick(selected)
+                selectedCharacter?.let { onAddClick(it) }
             },
+            enabled = selectedCharacter != null,
             variant = ButtonVariant.Primary,
             modifier = Modifier
                 .fillMaxWidth()
