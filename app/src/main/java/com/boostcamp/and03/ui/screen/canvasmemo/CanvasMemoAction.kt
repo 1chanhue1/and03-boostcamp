@@ -1,6 +1,7 @@
 package com.boostcamp.and03.ui.screen.canvasmemo
 
 import androidx.compose.ui.geometry.Offset
+import com.boostcamp.and03.ui.screen.bookdetail.model.CharacterUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.component.bottombar.MainBottomBarType
 
 sealed interface CanvasMemoAction {
@@ -31,4 +32,6 @@ sealed interface CanvasMemoAction {
     data class MoveNode(val nodeId: String, val newOffset: Offset) : CanvasMemoAction
 
     data class ConnectNodes(val fromId: String, val toId: String, val name: String) : CanvasMemoAction
+    data class SelectCharacterForNode(val character: CharacterUiModel?) : CanvasMemoAction
+    data class AddNodeAtPosition(val character: CharacterUiModel, val offset: Offset) : CanvasMemoAction
 }
