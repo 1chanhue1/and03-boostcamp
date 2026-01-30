@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -176,6 +177,23 @@ private fun CanvasMemoScreen(
                             translationY = panOffset.y
                             transformOrigin = TransformOrigin(0f, 0f)
                         }
+                        .pointerInput(uiState.pendingNodeCharacter, uiState.pendingNodeOffset) {
+                            detectTapGestures { tapOffset ->
+
+                                if (uiState.pendingNodeCharacter != null) {
+                                    val worldX = (tapOffset.x - panOffset.x) / scale
+                                    val worldY = (tapOffset.y - panOffset.y) / scale
+
+                                    onAction(
+                                        CanvasMemoAction.AddNodeAtPosition(
+                                            character = uiState.pendingNodeCharacter,
+                                            offset = Offset(worldX, worldY)
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
                 ) {
                     Arrows(
                         arrows = uiState.edges,
@@ -411,7 +429,7 @@ private fun CanvasMemoScreen(
                     onSearch = { },
                     onNewCharacterClick = { },
                     onAddClick = { character ->
-                        onAction(CanvasMemoAction.CloseAddNodeSheet)
+                        onAction(CanvasMemoAction.SelectCharacterForNode(character))
                     },
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
