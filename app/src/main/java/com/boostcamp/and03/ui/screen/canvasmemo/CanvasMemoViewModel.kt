@@ -9,6 +9,7 @@ import com.boostcamp.and03.data.repository.bookstorage.BookStorageRepository
 import com.boostcamp.and03.domain.editor.CanvasMemoEditor
 import com.boostcamp.and03.domain.factory.MemoGraphFactory
 import com.boostcamp.and03.domain.model.MemoGraph
+import com.boostcamp.and03.domain.model.MemoNode
 import com.boostcamp.and03.ui.navigation.Route
 import com.boostcamp.and03.ui.screen.bookdetail.model.toUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.component.bottombar.MainBottomBarType
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -136,6 +138,8 @@ class CanvasMemoViewModel @Inject constructor(
             is CanvasMemoAction.ConnectNodes -> handleConnectNodes(action)
 
             is CanvasMemoAction.OnBottomBarClick -> handleBottomBarClick(action)
+            is CanvasMemoAction.AddNodeAtPosition -> handleAddNodeAtPosition(action)
+            is CanvasMemoAction.SelectCharacterForNode -> handleSelectCharacterForNode(action)
         }
     }
 
@@ -244,6 +248,45 @@ class CanvasMemoViewModel @Inject constructor(
             )
         }
     }
+    private fun handleAddNodeAtPosition(
+        action: CanvasMemoAction.AddNodeAtPosition
+    ) {
+        val character = action.character
+        val id = UUID.randomUUID().toString()
+
+        val newNode = MemoNode.CharacterNode(
+            id = id,
+            name = character.name,
+            description = character.description,
+            offset = action.offset
+        )
+
+        val uiNode = newNode.toUiModel(
+            isSelected = false,
+            isDragging = false
+        )
+
+        _uiState.update {
+            it.copy(
+                nodes = it.nodes + (id to uiNode),
+                pendingNodeCharacter = null,
+                selectedBottomBarType = MainBottomBarType.NODE
+            )
+        }
+    }
+
+    private fun handleSelectCharacterForNode(
+        action: CanvasMemoAction.SelectCharacterForNode
+    ) {
+        _uiState.update {
+            it.copy(
+                pendingNodeCharacter = action.character,
+                isAddNodeSheetVisible = false,
+                selectedBottomBarType = MainBottomBarType.NODE
+            )
+        }
+    }
+
 
     private fun handleBottomBarClick(action: CanvasMemoAction.OnBottomBarClick) {
         val sheetType = when (action.type) {
