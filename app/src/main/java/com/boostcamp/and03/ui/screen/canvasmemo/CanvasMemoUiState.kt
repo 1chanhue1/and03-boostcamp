@@ -7,6 +7,9 @@ import com.boostcamp.and03.ui.screen.canvasmemo.model.EdgeUiModel
 import androidx.compose.ui.geometry.Offset
 import com.boostcamp.and03.ui.screen.canvasmemo.component.bottombar.MainBottomBarType
 import com.boostcamp.and03.ui.screen.canvasmemo.model.MemoNodeUiModel
+import com.boostcamp.and03.ui.screen.canvasmemo.model.RelationAddStep
+import com.boostcamp.and03.ui.screen.canvasmemo.model.RelationDialogUiState
+import com.boostcamp.and03.ui.screen.canvasmemo.model.toRelationDialogState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -14,7 +17,7 @@ data class CanvasMemoUiState(
     val nodes: Map<String, MemoNodeUiModel> = emptyMap(),
     val edges: List<EdgeUiModel> = emptyList(),
 
-    val relationSelection: RelationSelection? = null,
+    val relationSelection: RelationSelection = RelationSelection.empty(),
     val relationNameState: TextFieldState = TextFieldState(),
 
     val isAddNodeSheetVisible: Boolean = false,
@@ -40,9 +43,15 @@ data class CanvasMemoUiState(
     val pendingNodeCharacter: CharacterUiModel? = null,
 
 
+    val isBottomBarVisible: Boolean = true,
+    val relationAddStep: RelationAddStep = RelationAddStep.NONE,
     val characters: ImmutableList<CharacterUiModel> = persistentListOf(),
     val quotes: ImmutableList<QuoteUiModel> = persistentListOf()
-)
+) {
+    val relationDialogUiState: RelationDialogUiState
+        get() = toRelationDialogState()
+
+}
 
 data class RelationSelection(
     val fromNodeId: String?,
@@ -50,4 +59,12 @@ data class RelationSelection(
 ) {
     val isComplete: Boolean
         get() = fromNodeId != null && toNodeId != null
+
+    companion object {
+        fun empty(): RelationSelection =
+            RelationSelection(
+                fromNodeId = null,
+                toNodeId = null
+            )
+    }
 }
