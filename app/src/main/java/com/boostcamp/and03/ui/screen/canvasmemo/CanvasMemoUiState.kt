@@ -6,7 +6,6 @@ import com.boostcamp.and03.ui.screen.bookdetail.model.QuoteUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.model.EdgeUiModel
 import androidx.compose.ui.geometry.Offset
 import com.boostcamp.and03.ui.screen.canvasmemo.component.bottombar.MainBottomBarType
-import com.boostcamp.and03.ui.screen.canvasmemo.model.EdgeUiModel
 import com.boostcamp.and03.ui.screen.canvasmemo.model.MemoNodeUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -17,6 +16,8 @@ data class CanvasMemoUiState(
 
     val relationSelection: RelationSelection? = null,
     val relationNameState: TextFieldState = TextFieldState(),
+
+    val isAddNodeSheetVisible: Boolean = false,
 
     val bottomSheetType: CanvasMemoBottomSheetType? = null,
 
@@ -38,7 +39,6 @@ data class CanvasMemoUiState(
 
     val pendingNodeCharacter: CharacterUiModel? = null,
 
-    val characters: List<CharacterUiModel> = emptyList(),
 
     val characters: ImmutableList<CharacterUiModel> = persistentListOf(),
     val quotes: ImmutableList<QuoteUiModel> = persistentListOf()

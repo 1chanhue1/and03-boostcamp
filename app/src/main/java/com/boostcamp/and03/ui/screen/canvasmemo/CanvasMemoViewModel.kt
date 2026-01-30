@@ -118,12 +118,10 @@ class CanvasMemoViewModel @Inject constructor(
             CanvasMemoAction.CloseRelationDialog -> handleCloseRelationDialog()
             
             CanvasMemoAction.CloseAddCharacterDialog -> handleCloseAddCharacterDialog()
-            
+
             CanvasMemoAction.CloseAddNodeSheet -> handleCloseAddNodeSheet()
 
             is CanvasMemoAction.OpenRelationDialog -> handleOpenRelationDialog(action)
-
-            CanvasMemoAction.CloseAddCharacterDialog -> handleCloseAddCharacterDialog()
 
             CanvasMemoAction.CloseQuoteDialog -> handleCloseQuoteDialog()
 
@@ -160,11 +158,6 @@ class CanvasMemoViewModel @Inject constructor(
         }
     }
 
-    private fun handleCloseAddCharacterDialog() {
-        _uiState.update {
-            it.copy(isAddCharacterDialogVisible = false)
-        }
-    }
 
     private fun handleCloseAddNodeSheet() {
         _uiState.update {
@@ -287,19 +280,35 @@ class CanvasMemoViewModel @Inject constructor(
         }
     }
 
-
     private fun handleBottomBarClick(action: CanvasMemoAction.OnBottomBarClick) {
-        val sheetType = when (action.type) {
-            MainBottomBarType.NODE -> CanvasMemoBottomSheetType.AddCharacter
-            MainBottomBarType.QUOTE -> CanvasMemoBottomSheetType.AddQuote
-            else -> null
-        }
-
         _uiState.update {
-            it.copy(
-                selectedBottomBarType = action.type,
-                bottomSheetType = sheetType
-            )
+            when (action.type) {
+                MainBottomBarType.NODE -> {
+                    it.copy(
+                        selectedBottomBarType = action.type,
+                        isAddNodeSheetVisible = true,
+                        bottomSheetType = null
+                    )
+                }
+
+                MainBottomBarType.QUOTE -> {
+                    it.copy(
+                        selectedBottomBarType = action.type,
+                        bottomSheetType = CanvasMemoBottomSheetType.AddQuote,
+                        isAddNodeSheetVisible = false
+                    )
+                }
+
+                else -> {
+                    it.copy(
+                        selectedBottomBarType = action.type,
+                        isAddNodeSheetVisible = false,
+                        bottomSheetType = null
+                    )
+                }
+            }
         }
     }
+
+
 }
